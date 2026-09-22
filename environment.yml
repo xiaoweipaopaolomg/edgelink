@@ -1,0 +1,18 @@
+name: edgelink-dev
+# 只使用 conda-forge，避免 defaults 编译器与 conda-forge sysroot 混装。
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  # 固定 Python 主版本和 glibc 2.17 sysroot，使开发环境可重复且兼容较旧 Linux。
+  - python=3.11
+  - c-compiler
+  - cxx-compiler
+  - sysroot_linux-64=2.17
+  # 构建、SQLite 开发库和测试工具均由同一环境提供。
+  - cmake>=3.20
+  - ninja
+  - make
+  - pkg-config
+  - sqlite>=3.40
+  - pytest

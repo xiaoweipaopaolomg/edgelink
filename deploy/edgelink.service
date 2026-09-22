@@ -1,0 +1,27 @@
+[Unit]
+Description=EdgeLink industrial data gateway
+# 等待网络就绪再启动，降低开机阶段无效重连；进程本身仍具备退避重连能力。
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 生产部署使用不可登录的最小权限账户。
+User=edgelink
+Group=edgelink
+WorkingDirectory=/var/lib/edgelink
+StateDirectory=edgelink
+RuntimeDirectory=edgelink
+ExecStart=/usr/local/bin/edgelinkd --config /etc/edgelink/edgelink.conf
+Restart=on-failure
+RestartSec=2
+# 收紧文件系统和进程权限，仅开放数据库与运行时 Socket 目录写入。
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/edgelink /run/edgelink
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target
